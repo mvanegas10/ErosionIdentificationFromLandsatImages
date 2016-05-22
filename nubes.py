@@ -25,4 +25,5 @@ def obtenerNubes(bandas):
     maxi = maxi - (maxi/1.4)
     nubes = rgb > maxi
     nubes2 = nubes
-    return nubes
+    rgb = np.multiply(rgb,20)
+    return rgb, nubes

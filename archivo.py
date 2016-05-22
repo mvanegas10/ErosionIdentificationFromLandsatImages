@@ -5,8 +5,7 @@ import os
 from skimage import io
 
 # Recupera la ruta de las imágenes y la metadata
-def darArchivo(bandas, metadata):
-    path = raw_input('Por favor ingrese la ruta de la carpeta con las imágenes y la metadata:')
+def darArchivo(bandas, metadata, path):
     for root, dirs, files in os.walk(path):
         for archivo in files:
             if 'B1' in archivo:
