@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys, datetime
-import archivo, datos, nubes
+import archivo, datos, nubes, deteccion
 
 # main
 if __name__ == "__main__":
@@ -18,8 +18,9 @@ if __name__ == "__main__":
         print ':: Obteniendo datos %s ::' % (datetime.datetime.utcnow())
         datos.obtenerDatos(metadata)
         print ':: Segmentando nubes %s ::' % (datetime.datetime.utcnow())
-        nubes.obtenerNubes(bandas)
+        nubes = nubes.obtenerNubes(bandas)
         print ':: Detectando erosión %s ::' % (datetime.datetime.utcnow())
+        deteccion.detectarErosion(bandas, metadata, nubes)
 
     except IOError:
         print 'Por favor, ingrese una ruta válida.'
