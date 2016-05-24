@@ -9,6 +9,7 @@ import PIL
 from PIL import ImageTk
 import archivo, datos, nubes, deteccion
 import matplotlib.pyplot as plt
+import scipy.misc
 
 # Variables globales
 bandas = {}
@@ -17,7 +18,7 @@ bandas['imagenes'] = {}
 metadata = {}
 
 def start():
-    global imagen_rgb, imagen_nubes, imagen_ndvi, imagen_erosion, directory, val, w, root, bandas, metadata
+    global val, w, root
     root = Tk()
     top = Ventana(root)
     root.mainloop()
@@ -33,6 +34,11 @@ class Ventana:
         top.geometry("800x200+310+76")
         top.title("Erosión en LANDSAT 8")
         top.configure(background="#d9d9d9")
+
+        self.imagen_rgb = ''
+        self.imagen_nubes = ''
+        self.imagen_ndvi = ''
+        self.imagen_erosion = ''
 
         self.Label1 = Label(top)
         self.Label1.place(relx=0.13, rely=0.03, height=22, width=356)
@@ -103,13 +109,13 @@ class Ventana:
 
         print ':: Segmentando nubes %s ::' % (datetime.datetime.utcnow())
         np_rgb, np_nubes = nubes.obtenerNubes(bandas)
-        imagen_nubes = ImageTk.PhotoImage(PIL.Image.fromarray(np_nubes.astype('uint8')))
-        imagen_rgb = ImageTk.PhotoImage(PIL.Image.fromarray(np_rgb.astype('uint8')))
+        self.imagen_nubes = PIL.Image.fromarray(np_nubes.astype('uint64'))
+        self.imagen_rgb = PIL.Image.fromarray(np_rgb.astype('uint64'))
 
         print ':: Detectando erosión %s ::' % (datetime.datetime.utcnow())
         np_ndvi, np_erosion = deteccion.detectarErosion(bandas, metadata, np_nubes)
-        imagen_ndvi = ImageTk.PhotoImage(PIL.Image.fromarray(np_ndvi.astype('uint8')))
-        imagen_erosion = ImageTk.PhotoImage(PIL.Image.fromarray(np_erosion.astype('uint8')))
+        self.imagen_ndvi = PIL.Image.fromarray(np_ndvi.astype('uint8'))
+        self.imagen_erosion = PIL.Image.fromarray(np_erosion.astype('uint8'))
 
         figure = plt.figure()
 
@@ -130,12 +136,13 @@ class Ventana:
         ax4.imshow(np_erosion, cmap='gray', interpolation='nearest')
         ax4.axis('off')
 
+
         plt.axis('off')
         plt.show()
 
     def descargar(self):
-        print 'descargando'
-        imagen_rgb.save('%s/rgb.tif' % (self.ruta.get()))
-        imagen_nubes.save('%s/nubes.tif' % (self.ruta.get()))
-        imagen_ndvi.save('%s/ndvi.tif' % (self.ruta.get()))
-        imagen_erosion.save('%s/erosion.tif' % (self.ruta.get()))
+        print ':: Descargando imágenes %s ::' % (datetime.datetime.utcnow())
+        scipy.misc.imsave('%s/rgb.tif' % (self.ruta.get()),self.imagen_rgb)
+        scipy.misc.imsave('%s/nubes.tif' % (self.ruta.get()),self.imagen_nubes)
+        scipy.misc.imsave('%s/ndvi.tif' % (self.ruta.get()),self.imagen_ndvi)
+        scipy.misc.imsave('%s/erosion.tif' % (self.ruta.get()),self.imagen_erosion)

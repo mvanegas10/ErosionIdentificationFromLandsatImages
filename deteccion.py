@@ -5,51 +5,6 @@ from __future__ import division
 
 import math
 import numpy as np
-from skimage.filters import threshold_otsu
-
-# def detectarErosion(bandas, metadata, nubes):
-#     IRCercano = bandas['imagenes']['B5']
-#     rojo = bandas['imagenes']['B4']
-#
-#     mpIRCercano = float(metadata['REFLECTANCE_MULT_BAND_5'])
-#     mpRojo = float(metadata['REFLECTANCE_MULT_BAND_4'])
-#
-#     apIRCercano = float(metadata['REFLECTANCE_ADD_BAND_5'])
-#     apRojo = float(metadata['REFLECTANCE_ADD_BAND_5'])
-#
-#     se = float(metadata['SUN_ELEVATION'])
-#     sin_se = math.sin( se * math.pi/180 )
-#
-#     # Se lleva a cabo la corrección atomosférica para las bandas del infrarojo cercano y el rojo
-#
-#     correccionIRC = np.multiply(mpIRCercano,IRCercano)
-#     correccionIRC = np.add(correccionIRC,apIRCercano)
-#     correccionIRC = np.true_divide(correccionIRC,sin_se)
-#
-#     correccionR = np.multiply(mpRojo,rojo)
-#     correccionR = np.add(correccionR,apRojo)
-#     correccionR = np.true_divide(correccionR,sin_se)
-#
-#     # Se calcula el NDVI
-#     ndvi = np.divide(np.subtract(correccionIRC,correccionR),np.add(correccionIRC,correccionR),dtype=float)
-#
-#     # No se tienen en cuenta las nubes
-#     for i in range(len(nubes)):
-#         j = 0
-#         seguir = True
-#         while seguir:
-#             try:
-#                 if ndvi[i,j] == float('inf'):
-#                     ndvi[i,j] = 100
-#                 if nubes[i,j] == 1:
-#                     ndvi[i,j] = 100
-#                 j += 1
-#             except:
-#                 j = 0
-#                 seguir = False
-#
-#     binary = ndvi <= 0
-#     return ndvi, binary
 
 def detectarErosion(bandas, metadata, nubes):
     rojo = bandas['imagenes']['B5']
@@ -67,7 +22,7 @@ def detectarErosion(bandas, metadata, nubes):
     se = float(metadata['SUN_ELEVATION'])
     sin_se = math.sin( se * math.pi/180 )
 
-    # Se lleva a cabo la corrección atomosférica para las bandas del infrarojo cercano y el rojo
+    # Se lleva a cabo la corrección atomosférica para las bandas 2,5 y 6
 
     correccionR = np.multiply(mpRojo,rojo)
     correccionR = np.add(correccionR,apRojo)
@@ -83,7 +38,7 @@ def detectarErosion(bandas, metadata, nubes):
 
     ndvi = rojo
 
-    minNubes = np.min(nubes)
+    maxiRojo = np.max(rojo)
     maxNubes = np.max(nubes)
 
     # No se tienen en cuenta las nubes
@@ -92,29 +47,16 @@ def detectarErosion(bandas, metadata, nubes):
         seguir = True
         while seguir:
             try:
-                # if nubes[i,j] == minNubes:
-                ndvi[i,j] = [rojo[i,j],verde[i,j],azul[i,j]]
-                # elif nubes[i,j] == maxNubes:
-                #     ndvi[i,j] = maxiI
+                if nubes[i,j] == maxNubes:
+                    ndvi[i,j] = maxiRojo
+                else:
+                    ndvi[i,j] = [rojo[i,j],verde[i,j],azul[i,j]]
                 j += 1
             except:
                 j = 0
                 seguir = False
 
     maxi = np.max(ndvi)
-
-    for i in range(len(ndvi)):
-        j = 0
-        seguir = True
-        while seguir:
-            try:
-                if nubes[i,j] == maxNubes:
-                    ndvi[i,j] = maxiI
-                j += 1
-            except:
-                j = 0
-                seguir = False
-
 
     binary = ndvi <= (maxi - maxi*0.80)
     return ndvi, binary
