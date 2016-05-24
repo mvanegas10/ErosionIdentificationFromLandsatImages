@@ -109,8 +109,8 @@ class Ventana:
 
         print ':: Segmentando nubes %s ::' % (datetime.datetime.utcnow())
         np_rgb, np_nubes = nubes.obtenerNubes(bandas)
-        self.imagen_nubes = PIL.Image.fromarray(np_nubes.astype('uint64'))
-        self.imagen_rgb = PIL.Image.fromarray(np_rgb.astype('uint64'))
+        self.imagen_nubes = PIL.Image.fromarray(np_nubes.astype('uint8'))
+        self.imagen_rgb = PIL.Image.fromarray(np_rgb.astype('uint8'))
 
         print ':: Detectando erosión %s ::' % (datetime.datetime.utcnow())
         np_ndvi, np_erosion = deteccion.detectarErosion(bandas, metadata, np_nubes)
