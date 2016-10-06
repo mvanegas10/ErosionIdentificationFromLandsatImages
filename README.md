@@ -63,7 +63,7 @@ install python-imaging
 ## Authors
 
 <!-- Contributors table START -->
-| [![Meili Vanegas](https://avatars.githubusercontent.com/mvanegas10?s=100)<br /><sub>Meili Vanegas</sub>](https://github.com/mvanegas10)<br /> |
-| :---: |
+| [![Meili Vanegas](https://avatars.githubusercontent.com/mvanegas10?s=100)<br /><sub>Meili Vanegas</sub>](https://github.com/mvanegas10)<br /> | [![Ivan Ponce](https://avatars.githubusercontent.com/ivanponce22?s=100)<br /><sub>Iván Ponce</sub>](https://github.com/ivanponce22)<br /> |
+| :---: | :---: |
 
 <!-- Contributors table END -->
