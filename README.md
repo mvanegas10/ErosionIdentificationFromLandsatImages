@@ -46,8 +46,8 @@ install python-imaging
 ```
 
 ## Project Example
-
-| [natural](examples/natural.png) | [clouds](examples/clouds.png) | [ndvi](examples/ndvi.png) | [erosion](examples/erosion.png) |
+| ![natural](example/natural.png)<br /><sub>Image in natural color</sub><br />| ![clouds](example/clouds.png)<br /><sub>Identification of clouds</sub><br /> | ![ndvi](example/ndvi.png)<br /><sub>NDVI Index</sub><br /> | ![erosion](example/erosion.png)<br /><sub>Erosion</sub><br /> |
+| :---: | :---: | :---: | :---: |
 
 ## Built With
 
@@ -67,7 +67,3 @@ install python-imaging
 | :---: |
 
 <!-- Contributors table END -->
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
